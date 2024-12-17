@@ -1,5 +1,4 @@
-﻿// Archivo: main.cpp
-#include "ProyectoAB.h"
+﻿#include "ProyectoAB.h"
 #include <iostream>
 #include <algorithm>
 #include <regex>
@@ -66,6 +65,14 @@ string solicitarFechaValida() {
             cout << "Formato inválido. Asegúrese de usar DD/MM/AAAA." << endl;
         }
     }
+}
+
+bool validarIdPaciente(const vector<Paciente>& pacientes, int id) {
+    return any_of(pacientes.begin(), pacientes.end(), [id](const Paciente& p) { return p.getId() == id; });
+}
+
+bool validarIdMedico(const vector<Medico>& medicos, int id) {
+    return any_of(medicos.begin(), medicos.end(), [id](const Medico& m) { return m.getId() == id; });
 }
 
 int main() {
@@ -243,9 +250,24 @@ int main() {
                 cin.ignore();
                 switch (subOpcion) {
                 case 1: {
+                    int idPaciente, idMedico;
+                    cout << "Ingrese el ID del Paciente: ";
+                    cin >> idPaciente;
+                    cin.ignore();
+                    if (!validarIdPaciente(pacientes, idPaciente)) {
+                        cout << "ID de Paciente no encontrado. Operación cancelada." << endl;
+                        break;
+                    }
+                    cout << "Ingrese el ID del Médico: ";
+                    cin >> idMedico;
+                    cin.ignore();
+                    if (!validarIdMedico(medicos, idMedico)) {
+                        cout << "ID de Médico no encontrado. Operación cancelada." << endl;
+                        break;
+                    }
                     string fecha = solicitarFechaValida();
-                    CitaMedica nuevaCita = CitaMedica::crearCita();
-                    citas.push_back(nuevaCita);
+                    int idCita = citas.size() + 1; // Genera un ID secuencial
+                    citas.emplace_back(idCita, idPaciente, idMedico, fecha);
                     cout << "Cita registrada exitosamente." << endl;
                     break;
                 }
@@ -256,42 +278,6 @@ int main() {
                     }
                     break;
                 }
-                case 3: {
-                    int id;
-                    cout << "Ingrese el ID de la Cita a editar: ";
-                    cin >> id;
-                    cin.ignore();
-                    bool encontrado = false;
-                    for (auto& cita : citas) {
-                        if (cita.getId() == id) {
-                            string nuevaFecha = solicitarFechaValida();
-                            cita.editarCita(nuevaFecha);
-                            encontrado = true;
-                            break;
-                        }
-                    }
-                    if (!encontrado) cout << "Cita no encontrada." << endl;
-                    break;
-                }
-                case 4: {
-                    int id;
-                    cout << "Ingrese el ID de la Cita a eliminar: ";
-                    cin >> id;
-                    cin.ignore();
-                    auto it = remove_if(citas.begin(), citas.end(), [id](const CitaMedica& c) {
-                        return c.getId() == id;
-                        });
-                    if (it != citas.end()) {
-                        citas.erase(it, citas.end());
-                        cout << "Cita eliminada correctamente." << endl;
-                    }
-                    else {
-                        cout << "Cita no encontrada." << endl;
-                    }
-                    break;
-                }
-                case 5:
-                    break;
                 default:
                     cout << "Opción inválida. Intente nuevamente." << endl;
                 }
