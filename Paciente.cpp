@@ -1,37 +1,66 @@
 #include "Paciente.h"
+#include <iostream>
+using namespace std;
 
-// Constructor
-Paciente::Paciente(int id, const std::string& nombre, int edad, const std::string& historial_clinico)
-    : id(id), nombre(nombre), edad(edad), historial_clinico(historial_clinico) {}
+Paciente::Paciente(int id, string nombre, int edad, string historial)
+    : id(id), nombre(nombre), edad(edad), historial(historial) {}
 
-// Métodos para gestionar pacientes
-Paciente Paciente::crearPaciente(int id, const std::string& nombre, int edad, const std::string& historial) {
-    return Paciente(id, nombre, edad, historial);
-}
+int Paciente::getId() const { return id; }
+string Paciente::getNombre() const { return nombre; }
+int Paciente::getEdad() const { return edad; }
+string Paciente::getHistorial() const { return historial; }
 
-void Paciente::editarPaciente(const std::string& nuevoNombre, int nuevaEdad, const std::string& nuevoHistorial) {
+void Paciente::editarPaciente(string nuevoNombre, int nuevaEdad, string nuevoHistorial) {
     nombre = nuevoNombre;
     edad = nuevaEdad;
-    historial_clinico = nuevoHistorial;
+    historial = nuevoHistorial;
+    cout << "Paciente actualizado correctamente." << endl;
 }
 
-Paciente Paciente::buscarPaciente(const std::vector<Paciente>& pacientes, int id) {
-    auto it = std::find_if(pacientes.begin(), pacientes.end(), [id](const Paciente& p) { return p.id == id; });
-    if (it != pacientes.end()) {
-        return *it;
+void Paciente::mostrarInformacion() const {
+    cout << "ID: " << id << ", Nombre: " << nombre
+        << ", Edad: " << edad << ", Historial: " << historial << endl;
+}
+
+Paciente Paciente::crearPaciente() {
+    int id;
+    string nombre;
+    int edad;
+    string historial;
+
+    while (true) {
+        cout << "Ingrese ID: ";
+        cin >> id;
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Entrada no válida. Intente nuevamente." << endl;
+        }
+        else {
+            cin.ignore();
+            break;
+        }
     }
-    throw std::runtime_error("Paciente no encontrado.");
-}
 
-void Paciente::listarHistorial() const {
-    std::cout << "Historial de " << nombre << ": " << historial_clinico << std::endl;
-}
+    cout << "Ingrese Nombre: ";
+    getline(cin, nombre);
 
-// Getters
-int Paciente::getId() const {
-    return id;
-}
+    while (true) {
+        cout << "Ingrese Edad: ";
+        cin >> edad;
+        if (cin.fail()) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Entrada no válida. Intente nuevamente." << endl;
+        }
+        else {
+            cin.ignore();
+            break;
+        }
+    }
 
-std::string Paciente::getNombre() const {
-    return nombre;
+    cout << "Ingrese Historial: ";
+    getline(cin, historial);
+
+    return Paciente(id, nombre, edad, historial);
 }

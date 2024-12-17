@@ -1,31 +1,28 @@
 #ifndef PACIENTE_H
 #define PACIENTE_H
 
-#include <iostream>
-#include <vector>
 #include <string>
-#include <algorithm>
+using namespace std;
 
 class Paciente {
 private:
     int id;
-    std::string nombre;
+    string nombre;
     int edad;
-    std::string historial_clinico;
+    string historial;
 
 public:
-    // Constructor
-    Paciente(int id, const std::string& nombre, int edad, const std::string& historial_clinico);
+    Paciente(int id, string nombre, int edad, string historial);
 
-    // Métodos para gestionar pacientes
-    static Paciente crearPaciente(int id, const std::string& nombre, int edad, const std::string& historial);
-    void editarPaciente(const std::string& nuevoNombre, int nuevaEdad, const std::string& nuevoHistorial);
-    static Paciente buscarPaciente(const std::vector<Paciente>& pacientes, int id);
-    void listarHistorial() const;
-
-    // Getters
     int getId() const;
-    std::string getNombre() const;
+    string getNombre() const;
+    int getEdad() const;
+    string getHistorial() const;
+
+    void editarPaciente(string nuevoNombre, int nuevaEdad, string nuevoHistorial);
+    void mostrarInformacion() const;
+
+    static Paciente crearPaciente();
 };
 
-#endif // PACIENTE_H
+#endif

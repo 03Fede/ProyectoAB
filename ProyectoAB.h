@@ -2,7 +2,18 @@
 // o archivos de inclusión específicos de un proyecto.
 
 #pragma once
+#ifndef MAIN_H
+#define MAIN_H
 
 #include <iostream>
+#include <vector>
+#include "Paciente.h"
+#include "GestorArchivo.h"
+using namespace std;
+
+void mostrarMenu();
+
+#endif
+
 
 // TODO: Haga referencia aquí a los encabezados adicionales que el programa requiere.
