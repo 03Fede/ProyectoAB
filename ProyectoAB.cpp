@@ -78,6 +78,19 @@ void guardarMedicos(const vector<Medico>& medicos, const string& archivo) {
     cout << "Médicos guardados exitosamente." << endl;
 }
 
+void guardarCitas(const vector<CitaMedica>& citas, const string& archivo) {
+    ofstream out(archivo);
+    if (!out.is_open()) {
+        cout << "Error al abrir archivo para guardar citas." << endl;
+        return;
+    }
+    for (const auto& cita : citas) {
+        out << cita << endl;
+    }
+    out.close();
+    cout << "Citas guardadas exitosamente." << endl;
+}
+
 
 string solicitarFechaValida() {
     string fecha;

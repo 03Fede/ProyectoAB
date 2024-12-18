@@ -23,6 +23,7 @@ public:
     void mostrarInformacion() const;
 
     static CitaMedica crearCita();
-};
 
+    friend ostream& operator<<(ostream& os, const CitaMedica& c);
+};
 #endif

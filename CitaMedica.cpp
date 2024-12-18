@@ -53,3 +53,8 @@ CitaMedica CitaMedica::crearCita() {
 
     return CitaMedica(id, idPaciente, idMedico, fecha);
 }
+
+ostream& operator<<(ostream& os, const CitaMedica& c) {
+    os << c.id << "," << c.idPaciente << "," << c.idMedico << "," << c.fecha;
+    return os;
+}
