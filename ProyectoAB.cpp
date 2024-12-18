@@ -2,6 +2,7 @@
 #include <iostream>
 #include <algorithm>
 #include <regex>
+#include <fstream>
 using namespace std;
 
 void mostrarSubMenuPaciente() {
@@ -50,6 +51,20 @@ void mostrarMenu() {
     cout << "4. Salir" << endl;
     cout << "Seleccione una opción: ";
 }
+
+void guardarPacientes(const vector<Paciente>& pacientes, const string& archivo) {
+    ofstream out(archivo);
+    if (!out.is_open()) {
+        cout << "Error al abrir archivo para guardar pacientes." << endl;
+        return;
+    }
+    for (const auto& paciente : pacientes) {
+        out << paciente << endl;
+    }
+    out.close();
+    cout << "Pacientes guardados exitosamente." << endl;
+}
+
 
 string solicitarFechaValida() {
     string fecha;

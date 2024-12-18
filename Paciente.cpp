@@ -64,3 +64,8 @@ Paciente Paciente::crearPaciente() {
 
     return Paciente(id, nombre, edad, historial);
 }
+
+ostream& operator<<(ostream& os, const Paciente& p) {
+    os << p.id << "," << p.nombre << "," << p.edad << "," << p.historial;
+    return os;
+}

@@ -2,6 +2,7 @@
 #define PACIENTE_H
 
 #include <string>
+#include <iostream>
 using namespace std;
 
 class Paciente {
@@ -23,6 +24,8 @@ public:
     void mostrarInformacion() const;
 
     static Paciente crearPaciente();
+    
+    friend ostream& operator<<(ostream& os, const Paciente& p);
 };
 
 #endif
