@@ -49,7 +49,9 @@ void mostrarMenu() {
     cout << "1. Paciente" << endl;
     cout << "2. Médico" << endl;
     cout << "3. Cita" << endl;
-    cout << "4. Salir" << endl;
+    cout << "4. Cargar Datos desde Archivos" << endl;
+    cout << "5. Guardar Datos en Archivos" << endl;
+    cout << "6. Salir" << endl;
     cout << "Seleccione una opción: ";
 }
 
@@ -174,7 +176,6 @@ void cargarCitas(vector<CitaMedica>& citas, const string& archivo) {
     cout << "Citas cargadas exitosamente desde el archivo." << endl;
 }
 
-
 string solicitarFechaValida() {
     string fecha;
     regex formatoFecha("\\d{2}/\\d{2}/\\d{4}");
@@ -221,6 +222,29 @@ int main() {
                 cin.ignore();
                 break;
             }
+        }
+
+        switch (opcion) {
+        case 4: { // Cargar datos
+            cout << "Cargando datos..." << endl;
+            cargarPacientes(pacientes, archivoPacientes);
+            cargarMedicos(medicos, archivoMedicos);
+            cargarCitas(citas, archivoCitas);
+            break;
+        }
+        case 5: { // Guardar datos
+            cout << "Guardando datos..." << endl;
+            guardarPacientes(pacientes, archivoPacientes);
+            guardarMedicos(medicos, archivoMedicos);
+            guardarCitas(citas, archivoCitas);
+            break;
+        }
+        case 6: {
+            cout << "Saliendo del sistema..." << endl;
+            break;
+        }
+        default:
+            cout << "Opción inválida. Intente nuevamente." << endl;
         }
 
         switch (opcion) {
