@@ -120,6 +120,30 @@ void cargarPacientes(vector<Paciente>& pacientes, const string& archivo) {
     cout << "Pacientes cargados exitosamente desde el archivo." << endl;
 }
 
+void cargarMedicos(vector<Medico>& medicos, const string& archivo) {
+    ifstream in(archivo);
+    if (!in.is_open()) {
+        cout << "No se pudo abrir el archivo para cargar médicos." << endl;
+        return;
+    }
+    medicos.clear();
+    int id;
+    string nombre, especialidad, linea;
+
+    while (getline(in, linea)) {
+        stringstream ss(linea);
+        string tempId;
+
+        getline(ss, tempId, ',');
+        getline(ss, nombre, ',');
+        getline(ss, especialidad);
+
+        id = stoi(tempId);
+        medicos.emplace_back(id, nombre, especialidad);
+    }
+    in.close();
+    cout << "Médicos cargados exitosamente desde el archivo." << endl;
+}
 
 string solicitarFechaValida() {
     string fecha;
