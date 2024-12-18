@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <regex>
 #include <fstream>
+#include <sstream>
 using namespace std;
 
 void mostrarSubMenuPaciente() {
@@ -89,6 +90,34 @@ void guardarCitas(const vector<CitaMedica>& citas, const string& archivo) {
     }
     out.close();
     cout << "Citas guardadas exitosamente." << endl;
+}
+
+void cargarPacientes(vector<Paciente>& pacientes, const string& archivo) {
+    ifstream in(archivo);
+    if (!in.is_open()) {
+        cout << "No se pudo abrir el archivo para cargar pacientes." << endl;
+        return;
+    }
+    pacientes.clear();
+    int id, edad;
+    string nombre, historial, linea;
+
+    while (getline(in, linea)) {
+        stringstream ss(linea);
+        string tempId, tempEdad;
+
+        getline(ss, tempId, ',');
+        getline(ss, nombre, ',');
+        getline(ss, tempEdad, ',');
+        getline(ss, historial);
+
+        id = stoi(tempId);
+        edad = stoi(tempEdad);
+
+        pacientes.emplace_back(id, nombre, edad, historial);
+    }
+    in.close();
+    cout << "Pacientes cargados exitosamente desde el archivo." << endl;
 }
 
 
