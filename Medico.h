@@ -21,6 +21,8 @@ public:
     void mostrarInformacion() const;
 
     static Medico crearMedico();
+
+    friend ostream& operator<<(ostream& os, const Medico& m);
 };
 
 #endif

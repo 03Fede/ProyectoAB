@@ -47,3 +47,8 @@ Medico Medico::crearMedico() {
 
     return Medico(id, nombre, especialidad);
 }
+
+ostream& operator<<(ostream& os, const Medico& m) {
+    os << m.id << "," << m.nombre << "," << m.especialidad;
+    return os;
+}
