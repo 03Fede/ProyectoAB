@@ -145,6 +145,36 @@ void cargarMedicos(vector<Medico>& medicos, const string& archivo) {
     cout << "Médicos cargados exitosamente desde el archivo." << endl;
 }
 
+void cargarCitas(vector<CitaMedica>& citas, const string& archivo) {
+    ifstream in(archivo);
+    if (!in.is_open()) {
+        cout << "No se pudo abrir el archivo para cargar citas." << endl;
+        return;
+    }
+    citas.clear();
+    int id, idPaciente, idMedico;
+    string fecha, linea;
+
+    while (getline(in, linea)) {
+        stringstream ss(linea);
+        string tempId, tempIdPaciente, tempIdMedico;
+
+        getline(ss, tempId, ',');
+        getline(ss, tempIdPaciente, ',');
+        getline(ss, tempIdMedico, ',');
+        getline(ss, fecha);
+
+        id = stoi(tempId);
+        idPaciente = stoi(tempIdPaciente);
+        idMedico = stoi(tempIdMedico);
+
+        citas.emplace_back(id, idPaciente, idMedico, fecha);
+    }
+    in.close();
+    cout << "Citas cargadas exitosamente desde el archivo." << endl;
+}
+
+
 string solicitarFechaValida() {
     string fecha;
     regex formatoFecha("\\d{2}/\\d{2}/\\d{4}");
