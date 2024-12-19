@@ -26,6 +26,14 @@ string solicitarFechaValida() {
     }
 }
 
+bool validarIdMedico(const vector<Medico>& medicos, int id) {
+    return any_of(medicos.begin(), medicos.end(), [id](const Medico& m) { return m.getId() == id; });
+}
+
+bool validarIdPaciente(const vector<Paciente>& pacientes, int id) {
+    return any_of(pacientes.begin(), pacientes.end(), [id](const Paciente& p) { return p.getId() == id; });
+}
+
 void mostrarSubMenuPaciente() {
     cout << "==========================" << endl;
     cout << " Gestión de Pacientes " << endl;
