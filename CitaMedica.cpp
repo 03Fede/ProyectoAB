@@ -1,5 +1,6 @@
 #include "CitaMedica.h"
 #include <iostream>
+#include <limits>
 using namespace std;
 
 CitaMedica::CitaMedica(int id, int idPaciente, int idMedico, string fecha)
@@ -12,40 +13,39 @@ string CitaMedica::getFecha() const { return fecha; }
 
 void CitaMedica::editarCita(string nuevaFecha) {
     fecha = nuevaFecha;
-    cout << "Cita actualizada correctamente." << endl;
 }
 
 void CitaMedica::mostrarInformacion() const {
     cout << "ID: " << id << ", Paciente: " << idPaciente
-        << ", Medico: " << idMedico << ", Fecha: " << fecha << endl;
+        << ", Médico: " << idMedico << ", Fecha: " << fecha << endl;
 }
 
 CitaMedica CitaMedica::crearCita() {
-    int id;
-    int idPaciente;
-    int idMedico;
+    int id, idPaciente, idMedico;
     string fecha;
 
-    while (true) {
-        cout << "Ingrese ID de la Cita: ";
-        cin >> id;
-        if (cin.fail()) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Entrada no válida. Intente nuevamente." << endl;
-        }
-        else {
-            cin.ignore();
-            break;
-        }
+    cout << "Ingrese ID de la Cita: ";
+    while (!(cin >> id)) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Entrada no válida. Ingrese un número entero para el ID: ";
     }
-
-    cout << "Ingrese ID del Paciente: ";
-    cin >> idPaciente;
     cin.ignore();
 
-    cout << "Ingrese ID del Medico: ";
-    cin >> idMedico;
+    cout << "Ingrese ID del Paciente: ";
+    while (!(cin >> idPaciente)) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Entrada no válida. Ingrese un número entero para el ID del Paciente: ";
+    }
+    cin.ignore();
+
+    cout << "Ingrese ID del Médico: ";
+    while (!(cin >> idMedico)) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Entrada no válida. Ingrese un número entero para el ID del Médico: ";
+    }
     cin.ignore();
 
     cout << "Ingrese Fecha (DD/MM/AAAA): ";

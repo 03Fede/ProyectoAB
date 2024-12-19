@@ -11,8 +11,6 @@
 #include "GestorArchivo.h"
 using namespace std;
 
-void mostrarMenu();
-
 #endif
 
 

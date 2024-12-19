@@ -1,5 +1,6 @@
 #include "Medico.h"
 #include <iostream>
+#include <limits>
 using namespace std;
 
 Medico::Medico(int id, string nombre, string especialidad)
@@ -12,7 +13,6 @@ string Medico::getEspecialidad() const { return especialidad; }
 void Medico::editarMedico(string nuevoNombre, string nuevaEspecialidad) {
     nombre = nuevoNombre;
     especialidad = nuevaEspecialidad;
-    cout << "Medico actualizado correctamente." << endl;
 }
 
 void Medico::mostrarInformacion() const {
@@ -22,22 +22,15 @@ void Medico::mostrarInformacion() const {
 
 Medico Medico::crearMedico() {
     int id;
-    string nombre;
-    string especialidad;
+    string nombre, especialidad;
 
-    while (true) {
-        cout << "Ingrese ID: ";
-        cin >> id;
-        if (cin.fail()) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Entrada no válida. Intente nuevamente." << endl;
-        }
-        else {
-            cin.ignore();
-            break;
-        }
+    cout << "Ingrese ID: ";
+    while (!(cin >> id)) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Entrada no válida. Ingrese un número entero para el ID: ";
     }
+    cin.ignore();
 
     cout << "Ingrese Nombre: ";
     getline(cin, nombre);

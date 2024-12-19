@@ -1,4 +1,5 @@
 #include "Paciente.h"
+#include <limits>
 #include <iostream>
 using namespace std;
 
@@ -14,7 +15,6 @@ void Paciente::editarPaciente(string nuevoNombre, int nuevaEdad, string nuevoHis
     nombre = nuevoNombre;
     edad = nuevaEdad;
     historial = nuevoHistorial;
-    cout << "Paciente actualizado correctamente." << endl;
 }
 
 void Paciente::mostrarInformacion() const {
@@ -23,41 +23,27 @@ void Paciente::mostrarInformacion() const {
 }
 
 Paciente Paciente::crearPaciente() {
-    int id;
-    string nombre;
-    int edad;
-    string historial;
+    int id, edad;
+    string nombre, historial;
 
-    while (true) {
-        cout << "Ingrese ID: ";
-        cin >> id;
-        if (cin.fail()) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Entrada no válida. Intente nuevamente." << endl;
-        }
-        else {
-            cin.ignore();
-            break;
-        }
+    cout << "Ingrese ID: ";
+    while (!(cin >> id)) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Entrada no válida. Ingrese un número entero para el ID: ";
     }
+    cin.ignore();
 
     cout << "Ingrese Nombre: ";
     getline(cin, nombre);
 
-    while (true) {
-        cout << "Ingrese Edad: ";
-        cin >> edad;
-        if (cin.fail()) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Entrada no válida. Intente nuevamente." << endl;
-        }
-        else {
-            cin.ignore();
-            break;
-        }
+    cout << "Ingrese Edad: ";
+    while (!(cin >> edad)) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Entrada no válida. Ingrese un número entero para la Edad: ";
     }
+    cin.ignore();
 
     cout << "Ingrese Historial: ";
     getline(cin, historial);
