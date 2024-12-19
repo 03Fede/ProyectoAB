@@ -231,26 +231,74 @@ int main() {
         opcion = validarEntradaEntera("Seleccione una opción: ");
 
         switch (opcion) {
-        case 1: { // Gestión de Pacientes
+        case 3: {
+            int subOpcion;
+            do {
+                mostrarSubMenuCita();
+                subOpcion = validarEntradaEntera("Seleccione una opción: ");
+                switch (subOpcion) {
+                case 1: {
+                    int idPaciente = validarEntradaEntera("Ingrese el ID del Paciente: ");
+                    if (!validarIdPaciente(pacientes, idPaciente)) {
+                        cout << "ID de Paciente no encontrado. Operación cancelada." << endl;
+                        break;
+                    }
+
+                    int idMedico = validarEntradaEntera("Ingrese el ID del Médico: ");
+                    if (!validarIdMedico(medicos, idMedico)) {
+                        cout << "ID de Médico no encontrado. Operación cancelada." << endl;
+                        break;
+                    }
+
+                    string fecha = solicitarFechaValida();
+                    int idCita = static_cast<int>(citas.size()) + 1;
+                    citas.emplace_back(idCita, idPaciente, idMedico, fecha);
+                    cout << "Cita registrada exitosamente." << endl;
+                    break;
+                }
+                case 2: {
+                    cout << "Lista de Citas:" << endl;
+                    for (const auto& cita : citas) {
+                        cita.mostrarInformacion();
+                    }
+                    break;
+                }
+                case 3: {
+                    cout << "Funcionalidad de edición de citas pendiente." << endl;
+                    break;
+                }
+                case 4: {
+                    cout << "Funcionalidad de eliminación de citas pendiente." << endl;
+                    break;
+                }
+                case 5:
+                    break;
+                default:
+                    cout << "Opción inválida. Intente nuevamente." << endl;
+                }
+            } while (subOpcion != 5);
+            break;
+        }
+        case 1: {
             int subOpcion;
             do {
                 mostrarSubMenuPaciente();
                 subOpcion = validarEntradaEntera("Seleccione una opción: ");
                 switch (subOpcion) {
-                case 1: { // Registrar Paciente
+                case 1: {
                     Paciente nuevoPaciente = Paciente::crearPaciente();
                     pacientes.push_back(nuevoPaciente);
                     cout << "Paciente registrado exitosamente." << endl;
                     break;
                 }
-                case 2: { // Listar Pacientes
+                case 2: {
                     cout << "Lista de Pacientes:" << endl;
                     for (const auto& paciente : pacientes) {
                         paciente.mostrarInformacion();
                     }
                     break;
                 }
-                case 3: { // Editar Paciente
+                case 3: {
                     int id = validarEntradaEntera("Ingrese el ID del Paciente a editar: ");
                     bool encontrado = false;
                     for (auto& paciente : pacientes) {
