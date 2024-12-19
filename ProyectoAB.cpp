@@ -6,6 +6,10 @@
 #include <sstream>
 using namespace std;
 
+string solicitarFechaValida();
+bool validarIdMedico(const vector<Medico>& medicos, int id);
+bool validarIdPaciente(const vector<Paciente>& pacientes, int id);
+
 void mostrarSubMenuPaciente() {
     cout << "==========================" << endl;
     cout << " Gestión de Pacientes " << endl;
