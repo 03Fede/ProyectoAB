@@ -10,6 +10,22 @@ string solicitarFechaValida();
 bool validarIdMedico(const vector<Medico>& medicos, int id);
 bool validarIdPaciente(const vector<Paciente>& pacientes, int id);
 
+string solicitarFechaValida() {
+    string fecha;
+    regex formatoFecha("\\d{2}/\\d{2}/\\d{4}");
+
+    while (true) {
+        cout << "Ingrese Fecha (DD/MM/AAAA): ";
+        getline(cin, fecha);
+        if (regex_match(fecha, formatoFecha)) {
+            return fecha;
+        }
+        else {
+            cout << "Formato inválido. Asegúrese de usar DD/MM/AAAA." << endl;
+        }
+    }
+}
+
 void mostrarSubMenuPaciente() {
     cout << "==========================" << endl;
     cout << " Gestión de Pacientes " << endl;
