@@ -8,17 +8,24 @@ using namespace std;
 
 int validarEntradaEntera(const string& mensaje) {
     int valor;
-    cout << mensaje;
+    string entrada;
+
     while (true) {
-        cin >> valor;
-        if (cin.fail()) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Entrada no válida. Intente nuevamente: ";
+        cout << mensaje;
+        getline(cin, entrada); // Usamos getline para evitar problemas con entradas corruptas
+
+        try {
+            size_t pos;
+            valor = stoi(entrada, &pos); // Convertimos a entero y verificamos errores
+
+            if (pos != entrada.length()) { // Verificamos si toda la cadena fue procesada
+                throw invalid_argument("Entrada no válida");
+            }
+
+            return valor; // Devuelve el valor si todo está correcto
         }
-        else {
-            cin.ignore(); // Para descartar caracteres extra
-            return valor;
+        catch (const exception&) {
+            cout << "Entrada no válida. Por favor, ingrese un número entero válido." << endl;
         }
     }
 }
