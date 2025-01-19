@@ -73,6 +73,59 @@ int mostrarSubMenu(const string& titulo, const vector<string>& opciones) {
     return opcion;
 }
 
+// Funciones externas para manejar la presentación de pacientes
+void mostrarPaciente(const Paciente& paciente) {
+    cout << "ID: " << paciente.getId() << ", Nombre: " << paciente.getNombre()
+        << ", Edad: " << paciente.getEdad() << ", Historial: " << paciente.getHistorial() << endl;
+}
+
+Paciente solicitarDatosPaciente() {
+    int id = validarEntradaEntera("Ingrese ID: ");
+    cout << "Ingrese Nombre: ";
+    string nombre;
+    getline(cin, nombre);
+
+    int edad = validarEntradaEntera("Ingrese Edad: ");
+    cout << "Ingrese Historial: ";
+    string historial;
+    getline(cin, historial);
+
+    return Paciente(id, nombre, edad, historial);
+}
+
+// Funciones externas para manejar la presentación de médicos
+void mostrarMedico(const Medico& medico) {
+    cout << "ID: " << medico.getId() << ", Nombre: " << medico.getNombre()
+        << ", Especialidad: " << medico.getEspecialidad() << endl;
+}
+
+Medico solicitarDatosMedico() {
+    int id = validarEntradaEntera("Ingrese ID: ");
+    cout << "Ingrese Nombre: ";
+    string nombre;
+    getline(cin, nombre);
+
+    cout << "Ingrese Especialidad: ";
+    string especialidad;
+    getline(cin, especialidad);
+
+    return Medico(id, nombre, especialidad);
+}
+
+// Funciones externas para manejar la presentación de citas
+void mostrarCita(const CitaMedica& cita) {
+    cout << "ID: " << cita.getId() << ", Paciente ID: " << cita.getIdPaciente()
+        << ", Médico ID: " << cita.getIdMedico() << ", Fecha: " << cita.getFecha() << endl;
+}
+
+CitaMedica solicitarDatosCita(int idCita) {
+    int idPaciente = validarEntradaEntera("Ingrese ID del Paciente: ");
+    int idMedico = validarEntradaEntera("Ingrese ID del Médico: ");
+    string fecha = solicitarFechaValida();
+
+    return CitaMedica(idCita, idPaciente, idMedico, fecha);
+}
+
 // Submenú de los pacientes
 void gestionarPacientes(vector<Paciente>& pacientes) {
     vector<string> opcionesPaciente = {
