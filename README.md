@@ -20,3 +20,20 @@ Este proyecto es un sistema de gestión hospitalaria que permite manejar pacient
 - Registrar una cita médica entre un paciente y un médico.
 - Listar todas las citas registradas.
 - Editar o eliminar citas (pendiente de implementación).
+
+---
+
+## Requisitos del sistema
+- **C++17** o superior.
+- **CMake** versión 3.10 o superior.
+- Un compilador compatible:
+  - **Windows**: Visual Studio (2019 o superior) o MinGW.
+  - **Linux/macOS**: GCC o Clang.
+
+## Uso
+1. Al iniciar el sistema, selecciona una de las opciones del menú principal:
+- Gestión de pacientes.
+- Gestión de médicos.
+- Gestión de citas.
+- Cargar o guardar datos.
+2. Sigue las instrucciones para interactuar con el sistema.
