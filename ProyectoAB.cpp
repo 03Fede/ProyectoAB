@@ -347,6 +347,8 @@ int main() {
     string archivoMedicos = "medicos.txt";
     string archivoCitas = "citas.txt";
 
+    GestorArchivo gestorArchivo;
+
     int opcion;
     do {
         vector<string> opcionesMenuPrincipal = {
@@ -371,14 +373,16 @@ int main() {
             gestionarCitas(citas, pacientes, medicos);
             break;
         case 4:
-            GestorArchivo::cargarPacientes(pacientes, archivoPacientes);
-            GestorArchivo::cargarMedicos(medicos, archivoMedicos);
-            GestorArchivo::cargarCitas(citas, archivoCitas);
+            gestorArchivo.cargarPacientes(pacientes);
+            gestorArchivo.cargarMedicos(medicos);
+            gestorArchivo.cargarCitas(citas);
+            cout << "Datos cargados correctamente." << endl;
             break;
         case 5:
-            GestorArchivo::guardarPacientes(pacientes, archivoPacientes);
-            GestorArchivo::guardarMedicos(medicos, archivoMedicos);
-            GestorArchivo::guardarCitas(citas, archivoCitas);
+            gestorArchivo.guardarPacientes(pacientes);
+            gestorArchivo.guardarMedicos(medicos);
+            gestorArchivo.guardarCitas(citas);
+            cout << "Datos guardados correctamente." << endl;
             break;
         case 6:
             cout << "Saliendo del sistema..." << endl;

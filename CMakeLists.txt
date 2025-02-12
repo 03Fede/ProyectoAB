@@ -45,7 +45,7 @@ set(HEADERS
 )
 
 # Crear el ejecutable
-add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS} "GestorDatos.cpp" "GestorDatos.h" "IGestionable.h" "IRepositorio.h")
 
 # Opcional: Definir configuraciones específicas para compiladores
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")

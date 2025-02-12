@@ -5,18 +5,21 @@
 #include "Paciente.h"
 #include "Medico.h"
 #include "CitaMedica.h"
-using namespace std;
+#include "IRepositorio.h"
 
-class GestorArchivo {
+class GestorArchivo : public IRepositorio {
 public:
-    static void guardarPacientes(const vector<Paciente>& pacientes, const string& nombreArchivo);
-    static void cargarPacientes(vector<Paciente>& pacientes, const string& nombreArchivo);
+    // Métodos para pacientes
+    void guardarPacientes(const vector<Paciente>& pacientes) override;
+    void cargarPacientes(vector<Paciente>& pacientes) override;
 
-    static void guardarMedicos(const vector<Medico>& medicos, const string& nombreArchivo);
-    static void cargarMedicos(vector<Medico>& medicos, const string& nombreArchivo);
+    // Métodos para médicos
+    void guardarMedicos(const vector<Medico>& medicos);
+    void cargarMedicos(vector<Medico>& medicos);
 
-    static void guardarCitas(const vector<CitaMedica>& citas, const string& nombreArchivo);
-    static void cargarCitas(vector<CitaMedica>& citas, const string& nombreArchivo);
+    // Métodos para citas médicas
+    void guardarCitas(const vector<CitaMedica>& citas);
+    void cargarCitas(vector<CitaMedica>& citas);
 };
 
 #endif

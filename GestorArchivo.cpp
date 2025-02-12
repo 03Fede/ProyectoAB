@@ -1,108 +1,72 @@
 #include "GestorArchivo.h"
-#include "Paciente.h"
-#include "Medico.h"
-#include "CitaMedica.h"
 #include <fstream>
-#include <sstream>
 #include <iostream>
-#include <vector>
-#include <string>
+#include <sstream>
+
 using namespace std;
 
-void GestorArchivo::guardarPacientes(const vector<Paciente>& pacientes, const string& nombreArchivo) {
-    ofstream archivo(nombreArchivo);
-    if (!archivo.is_open()) {
-        cerr << "Error al abrir el archivo para guardar pacientes." << endl;
-        return;
+// Pacientes
+void GestorArchivo::guardarPacientes(const vector<Paciente>& pacientes) {
+    ofstream archivo("pacientes.txt");
+    for (const auto& p : pacientes) {
+        archivo << p.getId() << " " << p.getNombre() << " " << p.getEdad() << " " << p.getHistorial() << endl;
     }
-    for (const auto& paciente : pacientes) {
-        archivo << paciente.getId() << "," << paciente.getNombre() << "," << paciente.getEdad() << "," << paciente.getHistorial() << endl;
-    }
-    archivo.close();
 }
 
-void GestorArchivo::guardarMedicos(const vector<Medico>& medicos, const string& nombreArchivo) {
-    ofstream archivo(nombreArchivo);
-    if (!archivo.is_open()) {
-        cerr << "Error al abrir el archivo para guardar médicos." << endl;
-        return;
-    }
-    for (const auto& medico : medicos) {
-        archivo << medico.getId() << "," << medico.getNombre() << "," << medico.getEspecialidad() << endl;
-    }
-    archivo.close();
-}
+void GestorArchivo::cargarPacientes(vector<Paciente>& pacientes) {
+    ifstream archivo("pacientes.txt");
+    if (!archivo.is_open()) return;
 
-void GestorArchivo::guardarCitas(const vector<CitaMedica>& citas, const string& nombreArchivo) {
-    ofstream archivo(nombreArchivo);
-    if (!archivo.is_open()) {
-        cerr << "Error al abrir el archivo para guardar citas." << endl;
-        return;
-    }
-    for (const auto& cita : citas) {
-        archivo << cita.getId() << "," << cita.getIdPaciente() << "," << cita.getIdMedico() << "," << cita.getFecha() << endl;
-    }
-    archivo.close();
-}
-
-void GestorArchivo::cargarPacientes(vector<Paciente>& pacientes, const string& nombreArchivo) {
-    ifstream archivo(nombreArchivo);
-    if (!archivo.is_open()) {
-        cerr << "Error al abrir el archivo para cargar pacientes." << endl;
-        return;
-    }
     string linea;
     while (getline(archivo, linea)) {
         stringstream ss(linea);
         int id, edad;
         string nombre, historial;
-
-        getline(ss, nombre, ',');
-        ss >> id >> edad;
-        getline(ss, historial);
-
-        pacientes.emplace_back(id, nombre, edad, historial);
+        ss >> id >> nombre >> edad >> historial;
+        pacientes.push_back(Paciente(id, nombre, edad, historial));
     }
-    archivo.close();
 }
 
-void GestorArchivo::cargarMedicos(vector<Medico>& medicos, const string& nombreArchivo) {
-    ifstream archivo(nombreArchivo);
-    if (!archivo.is_open()) {
-        cerr << "Error al abrir el archivo para cargar médicos." << endl;
-        return;
+// Médicos
+void GestorArchivo::guardarMedicos(const vector<Medico>& medicos) {
+    ofstream archivo("medicos.txt");
+    for (const auto& m : medicos) {
+        archivo << m.getId() << " " << m.getNombre() << " " << m.getEspecialidad() << endl;
     }
+}
+
+void GestorArchivo::cargarMedicos(vector<Medico>& medicos) {
+    ifstream archivo("medicos.txt");
+    if (!archivo.is_open()) return;
+
     string linea;
     while (getline(archivo, linea)) {
         stringstream ss(linea);
         int id;
         string nombre, especialidad;
-
-        getline(ss, nombre, ',');
-        ss >> id;
-        getline(ss, especialidad);
-
-        medicos.emplace_back(id, nombre, especialidad);
+        ss >> id >> nombre >> especialidad;
+        medicos.push_back(Medico(id, nombre, especialidad));
     }
-    archivo.close();
 }
 
-void GestorArchivo::cargarCitas(vector<CitaMedica>& citas, const string& nombreArchivo) {
-    ifstream archivo(nombreArchivo);
-    if (!archivo.is_open()) {
-        cerr << "Error al abrir el archivo para cargar citas." << endl;
-        return;
+// Citas Médicas
+void GestorArchivo::guardarCitas(const vector<CitaMedica>& citas) {
+    ofstream archivo("citas.txt");
+    for (const auto& c : citas) {
+        archivo << c.getId() << " " << c.getIdPaciente() << " " << c.getIdMedico() << " " << c.getFecha() << endl;
     }
+}
+
+void GestorArchivo::cargarCitas(vector<CitaMedica>& citas) {
+    ifstream archivo("citas.txt");
+    if (!archivo.is_open()) return;
+
     string linea;
     while (getline(archivo, linea)) {
         stringstream ss(linea);
         int id, idPaciente, idMedico;
         string fecha;
-
-        ss >> id >> idPaciente >> idMedico;
-        getline(ss, fecha);
-
-        citas.emplace_back(id, idPaciente, idMedico, fecha);
+        ss >> id >> idPaciente >> idMedico >> fecha;
+        citas.push_back(CitaMedica(id, idPaciente, idMedico, fecha));
     }
-    archivo.close();
 }
