@@ -2,6 +2,7 @@
 #include "Medico.h"
 #include "CitaMedica.h"
 #include "GestorArchivo.h"
+#include "GestorDatos.h"
 #include <vector>
 #include <iostream>
 #include <string>
@@ -343,11 +344,16 @@ int main() {
     vector<Medico> medicos;
     vector<CitaMedica> citas;
 
-    string archivoPacientes = "pacientes.txt";
-    string archivoMedicos = "medicos.txt";
-    string archivoCitas = "citas.txt";
-
     GestorArchivo gestorArchivo;
+
+    gestorArchivo.cargarPacientes(pacientes);
+
+    gestorArchivo.cargarMedicos(medicos);
+
+    gestorArchivo.cargarCitas(citas);
+
+
+    GestorDatos gestorDatos(pacientes, medicos, citas);
 
     int opcion;
     do {
@@ -355,6 +361,9 @@ int main() {
             "Pacientes",
             "Médicos",
             "Citas",
+            "Buscar Paciente",
+            "Buscar Médico",
+            "Buscar Cita",
             "Cargar Datos",
             "Guardar Datos",
             "Salir"
@@ -372,25 +381,58 @@ int main() {
         case 3:
             gestionarCitas(citas, pacientes, medicos);
             break;
-        case 4:
+        case 4: {
+            int id = validarEntradaEntera("Ingrese el ID del Paciente a buscar: ");
+            Paciente* p = gestorDatos.buscarPaciente(id);
+            if (p) {
+                p->mostrarInformacion();
+            }
+            else {
+                cout << "Paciente no encontrado." << endl;
+            }
+            break;
+        }
+        case 5: {
+            int id = validarEntradaEntera("Ingrese el ID del Médico a buscar: ");
+            Medico* m = gestorDatos.buscarMedico(id);
+            if (m) {
+                m->mostrarInformacion();
+            }
+            else {
+                cout << "Médico no encontrado." << endl;
+            }
+            break;
+        }
+        case 6: {
+            int id = validarEntradaEntera("Ingrese el ID de la Cita a buscar: ");
+            CitaMedica* c = gestorDatos.buscarCita(id);
+            if (c) {
+                c->mostrarInformacion();
+            }
+            else {
+                cout << "Cita no encontrada." << endl;
+            }
+            break;
+        }
+        case 7:
             gestorArchivo.cargarPacientes(pacientes);
             gestorArchivo.cargarMedicos(medicos);
             gestorArchivo.cargarCitas(citas);
             cout << "Datos cargados correctamente." << endl;
             break;
-        case 5:
+        case 8:
             gestorArchivo.guardarPacientes(pacientes);
             gestorArchivo.guardarMedicos(medicos);
             gestorArchivo.guardarCitas(citas);
             cout << "Datos guardados correctamente." << endl;
             break;
-        case 6:
+        case 9:
             cout << "Saliendo del sistema..." << endl;
             break;
         default:
             cout << "Opción inválida. Intente nuevamente." << endl;
         }
-    } while (opcion != 6);
+    } while (opcion != 9);
 
     return 0;
 }
