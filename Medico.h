@@ -2,9 +2,12 @@
 #define MEDICO_H
 
 #include <string>
+#include <iostream>
+#include "IGestionable.h"
+#include "IMedicoFunciones.h" 
 using namespace std;
 
-class Medico {
+class Medico : public IGestionable, public IMedicoFunciones {
 private:
     int id;
     string nombre;
@@ -13,12 +16,12 @@ private:
 public:
     Medico(int id, string nombre, string especialidad);
 
-    int getId() const;
+    int getId() const override;
     string getNombre() const;
     string getEspecialidad() const;
 
     void editarMedico(string nuevoNombre, string nuevaEspecialidad);
-    void mostrarInformacion() const;
+    void mostrarInformacion() const override;
 
     static Medico crearMedico();
 

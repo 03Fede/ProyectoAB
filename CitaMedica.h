@@ -2,9 +2,10 @@
 #define CITAMEDICA_H
 
 #include <string>
+#include "IGestionable.h"
 using namespace std;
 
-class CitaMedica {
+class CitaMedica : public IGestionable {
 private:
     int id;
     int idPaciente;
@@ -14,13 +15,13 @@ private:
 public:
     CitaMedica(int id, int idPaciente, int idMedico, string fecha);
 
-    int getId() const;
+    int getId() const override;
     int getIdPaciente() const;
     int getIdMedico() const;
     string getFecha() const;
 
     void editarCita(string nuevaFecha);
-    void mostrarInformacion() const;
+    void mostrarInformacion() const override;
 
     static CitaMedica crearCita();
 

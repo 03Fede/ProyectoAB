@@ -1,87 +1,46 @@
 #include "GestorDatos.h"
-#include <algorithm>
-#include <iostream>
+#include "CitaMedica.h"
+#include "Medico.h"
+#include "Paciente.h"
 
-using namespace std;
-
-// Constructor
-GestorDatos::GestorDatos(vector<Paciente>& p, vector<Medico>& m, vector<CitaMedica>& c)
-    : pacientes(p), medicos(m), citas(c) {}
-
-// Métodos para pacientes
-void GestorDatos::agregarPaciente(const Paciente& paciente) {
-    pacientes.push_back(paciente);
-    cout << "Paciente agregado correctamente." << endl;
+// Agregar un objeto a la lista
+template <typename T>
+void GestorDatos::agregar(vector<T>& lista, const T& obj) {
+    lista.push_back(obj);
 }
 
-void GestorDatos::eliminarPaciente(int id) {
-    auto it = remove_if(pacientes.begin(), pacientes.end(),
-        [id](const Paciente& p) { return p.getId() == id; });
+// Eliminar un objeto de la lista por ID
+template <typename T>
+void GestorDatos::eliminar(vector<T>& lista, int id) {
+    auto it = remove_if(lista.begin(), lista.end(),
+        [id](const T& obj) { return obj.getId() == id; });
 
-    if (it != pacientes.end()) {
-        pacientes.erase(it, pacientes.end());
-        cout << "Paciente eliminado correctamente." << endl;
+    if (it != lista.end()) {
+        lista.erase(it, lista.end());
+        cout << "Elemento eliminado correctamente." << endl;
     }
     else {
-        cout << "Paciente no encontrado." << endl;
+        cout << "No se encontró el elemento con ID " << id << "." << endl;
     }
 }
 
-Paciente* GestorDatos::buscarPaciente(int id) {
-    for (auto& p : pacientes) {
-        if (p.getId() == id) return &p;
+// Buscar un objeto en la lista por ID
+template <typename T>
+T* GestorDatos::buscar(vector<T>& lista, int id) {
+    for (auto& obj : lista) {
+        if (obj.getId() == id) return &obj;
     }
     return nullptr;
 }
 
-// Métodos para médicos
-void GestorDatos::agregarMedico(const Medico& medico) {
-    medicos.push_back(medico);
-    cout << "Médico agregado correctamente." << endl;
-}
+template void GestorDatos::agregar(vector<Paciente>&, const Paciente&);
+template void GestorDatos::agregar(vector<Medico>&, const Medico&);
+template void GestorDatos::agregar(vector<CitaMedica>&, const CitaMedica&);
 
-void GestorDatos::eliminarMedico(int id) {
-    auto it = remove_if(medicos.begin(), medicos.end(),
-        [id](const Medico& m) { return m.getId() == id; });
+template void GestorDatos::eliminar(vector<Paciente>&, int);
+template void GestorDatos::eliminar(vector<Medico>&, int);
+template void GestorDatos::eliminar(vector<CitaMedica>&, int);
 
-    if (it != medicos.end()) {
-        medicos.erase(it, medicos.end());
-        cout << "Médico eliminado correctamente." << endl;
-    }
-    else {
-        cout << "Médico no encontrado." << endl;
-    }
-}
-
-Medico* GestorDatos::buscarMedico(int id) {
-    for (auto& m : medicos) {
-        if (m.getId() == id) return &m;
-    }
-    return nullptr;
-}
-
-// Métodos para citas médicas
-void GestorDatos::agregarCita(const CitaMedica& cita) {
-    citas.push_back(cita);
-    cout << "Cita médica agregada correctamente." << endl;
-}
-
-void GestorDatos::eliminarCita(int id) {
-    auto it = remove_if(citas.begin(), citas.end(),
-        [id](const CitaMedica& c) { return c.getId() == id; });
-
-    if (it != citas.end()) {
-        citas.erase(it, citas.end());
-        cout << "Cita médica eliminada correctamente." << endl;
-    }
-    else {
-        cout << "Cita médica no encontrada." << endl;
-    }
-}
-
-CitaMedica* GestorDatos::buscarCita(int id) {
-    for (auto& c : citas) {
-        if (c.getId() == id) return &c;
-    }
-    return nullptr;
-}
+template Paciente* GestorDatos::buscar(vector<Paciente>&, int);
+template Medico* GestorDatos::buscar(vector<Medico>&, int);
+template CitaMedica* GestorDatos::buscar(vector<CitaMedica>&, int);

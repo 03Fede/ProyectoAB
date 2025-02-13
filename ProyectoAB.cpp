@@ -10,6 +10,18 @@
 #include <algorithm>
 using namespace std;
 
+static int validarEntradaEntera(const string& mensaje);
+static string solicitarFechaValida();
+
+static Paciente solicitarDatosPaciente();
+static Medico solicitarDatosMedico();
+static CitaMedica solicitarDatosCita(int idCita);
+
+static int mostrarSubMenu(const string& titulo, const vector<string>& opciones);
+static void gestionarPacientes(vector<Paciente>& pacientes);
+static void gestionarMedicos(vector<Medico>& medicos);
+static void gestionarCitas(vector<CitaMedica>& citas, vector<Paciente>& pacientes, vector<Medico>& medicos);
+
 // Función para validar entrada de números enteros
 int validarEntradaEntera(const string& mensaje) {
     int valor;
@@ -40,50 +52,11 @@ string solicitarFechaValida() {
     }
 }
 
-// Validar si un ID de paciente existe en el vector
-bool validarIdPaciente(const vector<Paciente>& pacientes, int id) {
-    return any_of(pacientes.begin(), pacientes.end(), [id](const Paciente& p) {
-        return p.getId() == id;
-        });
-}
-
-// Validar si un ID de médico existe en el vector
-bool validarIdMedico(const vector<Medico>& medicos, int id) {
-    return any_of(medicos.begin(), medicos.end(), [id](const Medico& m) {
-        return m.getId() == id;
-        });
-}
-
-// Función genérica para mostrar los menús
-int mostrarSubMenu(const string& titulo, const vector<string>& opciones) {
-    cout << "==========================" << endl;
-    cout << " " << titulo << " " << endl;
-    cout << "==========================" << endl;
-
-    for (size_t i = 0; i < opciones.size(); ++i) {
-        cout << i + 1 << ". " << opciones[i] << endl;
-    }
-
-    cout << "Seleccione una opción: ";
-    int opcion = validarEntradaEntera("");
-    if (opcion < 1 || opcion > static_cast<int>(opciones.size())) {
-        cout << "Opción inválida. Intente nuevamente." << endl;
-        return mostrarSubMenu(titulo, opciones);
-    }
-
-    return opcion;
-}
-
-// Funciones externas para manejar la presentación de pacientes
-void mostrarPaciente(const Paciente& paciente) {
-    cout << "ID: " << paciente.getId() << ", Nombre: " << paciente.getNombre()
-        << ", Edad: " << paciente.getEdad() << ", Historial: " << paciente.getHistorial() << endl;
-}
-
 Paciente solicitarDatosPaciente() {
-    int id = validarEntradaEntera("Ingrese ID: ");
+    int id = validarEntradaEntera("Ingrese ID del Paciente: ");
     cout << "Ingrese Nombre: ";
     string nombre;
+    cin.ignore();
     getline(cin, nombre);
 
     int edad = validarEntradaEntera("Ingrese Edad: ");
@@ -94,16 +67,11 @@ Paciente solicitarDatosPaciente() {
     return Paciente(id, nombre, edad, historial);
 }
 
-// Funciones externas para manejar la presentación de médicos
-void mostrarMedico(const Medico& medico) {
-    cout << "ID: " << medico.getId() << ", Nombre: " << medico.getNombre()
-        << ", Especialidad: " << medico.getEspecialidad() << endl;
-}
-
 Medico solicitarDatosMedico() {
-    int id = validarEntradaEntera("Ingrese ID: ");
+    int id = validarEntradaEntera("Ingrese ID del Médico: ");
     cout << "Ingrese Nombre: ";
     string nombre;
+    cin.ignore();
     getline(cin, nombre);
 
     cout << "Ingrese Especialidad: ";
@@ -111,12 +79,6 @@ Medico solicitarDatosMedico() {
     getline(cin, especialidad);
 
     return Medico(id, nombre, especialidad);
-}
-
-// Funciones externas para manejar la presentación de citas
-void mostrarCita(const CitaMedica& cita) {
-    cout << "ID: " << cita.getId() << ", Paciente ID: " << cita.getIdPaciente()
-        << ", Médico ID: " << cita.getIdMedico() << ", Fecha: " << cita.getFecha() << endl;
 }
 
 CitaMedica solicitarDatosCita(int idCita) {
@@ -127,11 +89,25 @@ CitaMedica solicitarDatosCita(int idCita) {
     return CitaMedica(idCita, idPaciente, idMedico, fecha);
 }
 
-// Submenú de los pacientes
+// Función genérica para mostrar los submenús
+int mostrarSubMenu(const string& titulo, const vector<string>& opciones) {
+    cout << "\n==========================" << endl;
+    cout << " " << titulo << " " << endl;
+    cout << "==========================" << endl;
+
+    for (size_t i = 0; i < opciones.size(); ++i) {
+        cout << i + 1 << ". " << opciones[i] << endl;
+    }
+
+    cout << "Seleccione una opción: ";
+    return validarEntradaEntera("");
+}
+
 void gestionarPacientes(vector<Paciente>& pacientes) {
     vector<string> opcionesPaciente = {
         "Registrar Paciente",
         "Listar Pacientes",
+        "Buscar Paciente",
         "Editar Paciente",
         "Eliminar Paciente",
         "Volver"
@@ -143,8 +119,8 @@ void gestionarPacientes(vector<Paciente>& pacientes) {
 
         switch (subOpcion) {
         case 1: {
-            Paciente nuevoPaciente = Paciente::crearPaciente();
-            pacientes.push_back(nuevoPaciente);
+            Paciente nuevoPaciente = solicitarDatosPaciente();
+            GestorDatos::agregar(pacientes, nuevoPaciente);
             cout << "Paciente registrado exitosamente." << endl;
             break;
         }
@@ -156,23 +132,10 @@ void gestionarPacientes(vector<Paciente>& pacientes) {
             break;
         }
         case 3: {
-            int id = validarEntradaEntera("Ingrese el ID del Paciente a editar: ");
-            auto it = find_if(pacientes.begin(), pacientes.end(), [id](const Paciente& p) {
-                return p.getId() == id;
-                });
-            if (it != pacientes.end()) {
-                string nuevoNombre;
-                int nuevaEdad;
-                string nuevoHistorial;
-
-                cout << "Ingrese nuevo Nombre: ";
-                getline(cin, nuevoNombre);
-                nuevaEdad = validarEntradaEntera("Ingrese nueva Edad: ");
-                cout << "Ingrese nuevo Historial: ";
-                getline(cin, nuevoHistorial);
-
-                it->editarPaciente(nuevoNombre, nuevaEdad, nuevoHistorial);
-                cout << "Paciente editado exitosamente." << endl;
+            int id = validarEntradaEntera("Ingrese el ID del Paciente a buscar: ");
+            Paciente* p = GestorDatos::buscar(pacientes, id);
+            if (p) {
+                p->mostrarInformacion();
             }
             else {
                 cout << "Paciente no encontrado." << endl;
@@ -180,28 +143,31 @@ void gestionarPacientes(vector<Paciente>& pacientes) {
             break;
         }
         case 4: {
-            int id = validarEntradaEntera("Ingrese el ID del Paciente a eliminar: ");
-            auto it = remove_if(pacientes.begin(), pacientes.end(), [id](const Paciente& p) {
-                return p.getId() == id;
-                });
-            if (it != pacientes.end()) {
-                pacientes.erase(it, pacientes.end());
-                cout << "Paciente eliminado correctamente." << endl;
+            int id = validarEntradaEntera("Ingrese el ID del Paciente a editar: ");
+            Paciente* p = GestorDatos::buscar(pacientes, id);
+            if (p) {
+                *p = solicitarDatosPaciente();
+                cout << "Paciente editado exitosamente." << endl;
             }
             else {
                 cout << "Paciente no encontrado." << endl;
             }
             break;
         }
+        case 5: {
+            int id = validarEntradaEntera("Ingrese el ID del Paciente a eliminar: ");
+            GestorDatos::eliminar(pacientes, id);
+            break;
         }
-    } while (subOpcion != 5);
+        }
+    } while (subOpcion != 6);
 }
 
-// Submenú de  los médicos
 void gestionarMedicos(vector<Medico>& medicos) {
     vector<string> opcionesMedico = {
         "Registrar Médico",
         "Listar Médicos",
+        "Buscar Médico",
         "Editar Médico",
         "Eliminar Médico",
         "Volver"
@@ -213,8 +179,8 @@ void gestionarMedicos(vector<Medico>& medicos) {
 
         switch (subOpcion) {
         case 1: {
-            Medico nuevoMedico = Medico::crearMedico();
-            medicos.push_back(nuevoMedico);
+            Medico nuevoMedico = solicitarDatosMedico();
+            GestorDatos::agregar(medicos, nuevoMedico);
             cout << "Médico registrado exitosamente." << endl;
             break;
         }
@@ -226,21 +192,10 @@ void gestionarMedicos(vector<Medico>& medicos) {
             break;
         }
         case 3: {
-            int id = validarEntradaEntera("Ingrese el ID del Médico a editar: ");
-            auto it = find_if(medicos.begin(), medicos.end(), [id](const Medico& m) {
-                return m.getId() == id;
-                });
-            if (it != medicos.end()) {
-                string nuevoNombre;
-                string nuevaEspecialidad;
-
-                cout << "Ingrese nuevo Nombre: ";
-                getline(cin, nuevoNombre);
-                cout << "Ingrese nueva Especialidad: ";
-                getline(cin, nuevaEspecialidad);
-
-                it->editarMedico(nuevoNombre, nuevaEspecialidad);
-                cout << "Médico editado exitosamente." << endl;
+            int id = validarEntradaEntera("Ingrese el ID del Médico a buscar: ");
+            Medico* m = GestorDatos::buscar(medicos, id);
+            if (m) {
+                m->mostrarInformacion();
             }
             else {
                 cout << "Médico no encontrado." << endl;
@@ -248,28 +203,31 @@ void gestionarMedicos(vector<Medico>& medicos) {
             break;
         }
         case 4: {
-            int id = validarEntradaEntera("Ingrese el ID del Médico a eliminar: ");
-            auto it = remove_if(medicos.begin(), medicos.end(), [id](const Medico& m) {
-                return m.getId() == id;
-                });
-            if (it != medicos.end()) {
-                medicos.erase(it, medicos.end());
-                cout << "Médico eliminado correctamente." << endl;
+            int id = validarEntradaEntera("Ingrese el ID del Médico a editar: ");
+            Medico* m = GestorDatos::buscar(medicos, id);
+            if (m) {
+                *m = solicitarDatosMedico();
+                cout << "Médico editado exitosamente." << endl;
             }
             else {
                 cout << "Médico no encontrado." << endl;
             }
             break;
         }
+        case 5: {
+            int id = validarEntradaEntera("Ingrese el ID del Médico a eliminar: ");
+            GestorDatos::eliminar(medicos, id);
+            break;
         }
-    } while (subOpcion != 5);
+        }
+    } while (subOpcion != 6);
 }
 
-// Submenú de las citas
-void gestionarCitas(vector<CitaMedica>& citas, const vector<Paciente>& pacientes, const vector<Medico>& medicos) {
+void gestionarCitas(vector<CitaMedica>& citas, vector<Paciente>& pacientes, vector<Medico>& medicos) {
     vector<string> opcionesCita = {
         "Registrar Cita",
         "Listar Citas",
+        "Buscar Cita",
         "Editar Cita",
         "Eliminar Cita",
         "Volver"
@@ -281,21 +239,8 @@ void gestionarCitas(vector<CitaMedica>& citas, const vector<Paciente>& pacientes
 
         switch (subOpcion) {
         case 1: {
-            int idPaciente = validarEntradaEntera("Ingrese el ID del Paciente: ");
-            if (!validarIdPaciente(pacientes, idPaciente)) {
-                cout << "ID de Paciente no encontrado. Operación cancelada." << endl;
-                break;
-            }
-
-            int idMedico = validarEntradaEntera("Ingrese el ID del Médico: ");
-            if (!validarIdMedico(medicos, idMedico)) {
-                cout << "ID de Médico no encontrado. Operación cancelada." << endl;
-                break;
-            }
-
-            string fecha = solicitarFechaValida();
-            int idCita = static_cast<int>(citas.size()) + 1;
-            citas.emplace_back(idCita, idPaciente, idMedico, fecha);
+            CitaMedica nuevaCita = solicitarDatosCita(static_cast<int>(citas.size()) + 1);
+            GestorDatos::agregar(citas, nuevaCita);
             cout << "Cita registrada exitosamente." << endl;
             break;
         }
@@ -307,14 +252,10 @@ void gestionarCitas(vector<CitaMedica>& citas, const vector<Paciente>& pacientes
             break;
         }
         case 3: {
-            int id = validarEntradaEntera("Ingrese el ID de la Cita a editar: ");
-            auto it = find_if(citas.begin(), citas.end(), [id](const CitaMedica& c) {
-                return c.getId() == id;
-                });
-            if (it != citas.end()) {
-                string nuevaFecha = solicitarFechaValida();
-                it->editarCita(nuevaFecha);
-                cout << "Cita editada exitosamente." << endl;
+            int id = validarEntradaEntera("Ingrese el ID de la Cita a buscar: ");
+            CitaMedica* c = GestorDatos::buscar(citas, id);
+            if (c) {
+                c->mostrarInformacion();
             }
             else {
                 cout << "Cita no encontrada." << endl;
@@ -322,21 +263,24 @@ void gestionarCitas(vector<CitaMedica>& citas, const vector<Paciente>& pacientes
             break;
         }
         case 4: {
-            int id = validarEntradaEntera("Ingrese el ID de la Cita a eliminar: ");
-            auto it = remove_if(citas.begin(), citas.end(), [id](const CitaMedica& c) {
-                return c.getId() == id;
-                });
-            if (it != citas.end()) {
-                citas.erase(it, citas.end());
-                cout << "Cita eliminada correctamente." << endl;
+            int id = validarEntradaEntera("Ingrese el ID de la Cita a editar: ");
+            CitaMedica* c = GestorDatos::buscar(citas, id);
+            if (c) {
+                *c = solicitarDatosCita(id);
+                cout << "Cita editada exitosamente." << endl;
             }
             else {
                 cout << "Cita no encontrada." << endl;
             }
             break;
         }
+        case 5: {
+            int id = validarEntradaEntera("Ingrese el ID de la Cita a eliminar: ");
+            GestorDatos::eliminar(citas, id);
+            break;
         }
-    } while (subOpcion != 5);
+        }
+    } while (subOpcion != 6);
 }
 
 int main() {
@@ -346,30 +290,10 @@ int main() {
 
     GestorArchivo gestorArchivo;
 
-    gestorArchivo.cargarPacientes(pacientes);
-
-    gestorArchivo.cargarMedicos(medicos);
-
-    gestorArchivo.cargarCitas(citas);
-
-
-    GestorDatos gestorDatos(pacientes, medicos, citas);
-
     int opcion;
     do {
-        vector<string> opcionesMenuPrincipal = {
-            "Pacientes",
-            "Médicos",
-            "Citas",
-            "Buscar Paciente",
-            "Buscar Médico",
-            "Buscar Cita",
-            "Cargar Datos",
-            "Guardar Datos",
-            "Salir"
-        };
-
-        opcion = mostrarSubMenu("Sistema de Gestión Hospitalaria", opcionesMenuPrincipal);
+        vector<string> opcionesMenu = { "Pacientes", "Médicos", "Citas", "Guardar Datos","Cargar Datos", "Salir" };
+        opcion = mostrarSubMenu("Sistema de Gestión Hospitalaria", opcionesMenu);
 
         switch (opcion) {
         case 1:
@@ -381,58 +305,26 @@ int main() {
         case 3:
             gestionarCitas(citas, pacientes, medicos);
             break;
-        case 4: {
-            int id = validarEntradaEntera("Ingrese el ID del Paciente a buscar: ");
-            Paciente* p = gestorDatos.buscarPaciente(id);
-            if (p) {
-                p->mostrarInformacion();
-            }
-            else {
-                cout << "Paciente no encontrado." << endl;
-            }
-            break;
-        }
-        case 5: {
-            int id = validarEntradaEntera("Ingrese el ID del Médico a buscar: ");
-            Medico* m = gestorDatos.buscarMedico(id);
-            if (m) {
-                m->mostrarInformacion();
-            }
-            else {
-                cout << "Médico no encontrado." << endl;
-            }
-            break;
-        }
-        case 6: {
-            int id = validarEntradaEntera("Ingrese el ID de la Cita a buscar: ");
-            CitaMedica* c = gestorDatos.buscarCita(id);
-            if (c) {
-                c->mostrarInformacion();
-            }
-            else {
-                cout << "Cita no encontrada." << endl;
-            }
-            break;
-        }
-        case 7:
-            gestorArchivo.cargarPacientes(pacientes);
-            gestorArchivo.cargarMedicos(medicos);
-            gestorArchivo.cargarCitas(citas);
-            cout << "Datos cargados correctamente." << endl;
-            break;
-        case 8:
+        case 4:
             gestorArchivo.guardarPacientes(pacientes);
             gestorArchivo.guardarMedicos(medicos);
             gestorArchivo.guardarCitas(citas);
             cout << "Datos guardados correctamente." << endl;
             break;
-        case 9:
+        case 5:
+            gestorArchivo.cargarPacientes(pacientes);
+            gestorArchivo.cargarMedicos(medicos);
+            gestorArchivo.cargarCitas(citas);
+            cout << "Datos cargados correctamente." << endl;
+            break;
+        case 6:
             cout << "Saliendo del sistema..." << endl;
             break;
+
         default:
-            cout << "Opción inválida. Intente nuevamente." << endl;
+            cout << "Opción no válida. Intente nuevamente." << endl;
         }
-    } while (opcion != 9);
+    } while (opcion != 6);
 
     return 0;
 }

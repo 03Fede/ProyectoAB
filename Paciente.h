@@ -3,9 +3,10 @@
 
 #include <string>
 #include <iostream>
+#include "IGestionable.h" 
 using namespace std;
 
-class Paciente {
+class Paciente : public IGestionable {
 private:
     int id;
     string nombre;
@@ -15,13 +16,13 @@ private:
 public:
     Paciente(int id, string nombre, int edad, string historial);
 
-    int getId() const;
+    int getId() const override;
     string getNombre() const;
     int getEdad() const;
     string getHistorial() const;
 
     void editarPaciente(string nuevoNombre, int nuevaEdad, string nuevoHistorial);
-    void mostrarInformacion() const;
+    void mostrarInformacion() const override;
 
     static Paciente crearPaciente();
     
