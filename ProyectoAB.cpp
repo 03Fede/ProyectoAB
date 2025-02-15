@@ -3,6 +3,8 @@
 #include "CitaMedica.h"
 #include "GestorArchivo.h"
 #include "GestorDatos.h"
+#include "IMedicoRepositorio.h"
+#include "MedicoRepositorioArchivo.h"
 #include <vector>
 #include <iostream>
 #include <string>
@@ -284,6 +286,14 @@ void gestionarCitas(vector<CitaMedica>& citas, vector<Paciente>& pacientes, vect
 }
 
 int main() {
+    IMedicoRepositorio* repo = new MedicoRepositorioArchivo();
+
+    Medico nuevoMedico(3, "Dr. Onnis", "Neurología");
+    repo->guardar(nuevoMedico);
+
+    Medico recuperado = repo->obtenerPorId(3);
+    std::cout << "Médico recuperado: " << recuperado.getNombre() << std::endl;
+
     vector<Paciente> pacientes;
     vector<Medico> medicos;
     vector<CitaMedica> citas;
@@ -325,6 +335,8 @@ int main() {
             cout << "Opción no válida. Intente nuevamente." << endl;
         }
     } while (opcion != 6);
+
+    delete repo;
 
     return 0;
 }

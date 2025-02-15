@@ -23,6 +23,8 @@ public:
     void editarMedico(string nuevoNombre, string nuevaEspecialidad);
     void mostrarInformacion() const override;
 
+    void prescribirMedicamento(const std::string& medicamento) override;
+
     static Medico crearMedico();
 
     friend ostream& operator<<(ostream& os, const Medico& m);

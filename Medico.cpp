@@ -15,6 +15,10 @@ void Medico::editarMedico(string nuevoNombre, string nuevaEspecialidad) {
     especialidad = nuevaEspecialidad;
 }
 
+void Medico::prescribirMedicamento(const std::string& medicamento) {
+    cout << "El médico " << nombre << " ha prescrito: " << medicamento << endl;
+}
+
 void Medico::mostrarInformacion() const {
     cout << "ID: " << id << ", Nombre: " << nombre
         << ", Especialidad: " << especialidad << endl;
