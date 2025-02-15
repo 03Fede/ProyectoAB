@@ -288,11 +288,16 @@ void gestionarCitas(vector<CitaMedica>& citas, vector<Paciente>& pacientes, vect
 int main() {
     IMedicoRepositorio* repo = new MedicoRepositorioArchivo();
 
-    Medico nuevoMedico(3, "Dr. Onnis", "Neurología");
+    Medico nuevoMedico(3, "Dr. Onnis", "Neurologia");
     repo->guardar(nuevoMedico);
 
     Medico recuperado = repo->obtenerPorId(3);
-    std::cout << "Médico recuperado: " << recuperado.getNombre() << std::endl;
+    if (recuperado.getNombre() != "Ejemplo") {
+        std::cout << "Médico recuperado: " << recuperado.getNombre() << std::endl;
+    }
+    else {
+        std::cout << "Error: No se encontró el médico en el archivo." << std::endl;
+    }
 
     vector<Paciente> pacientes;
     vector<Medico> medicos;
