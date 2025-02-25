@@ -286,7 +286,7 @@ void gestionarCitas(vector<CitaMedica>& citas, vector<Paciente>& pacientes, vect
 }
 
 int main() {
-    IMedicoRepositorio* repo = new MedicoRepositorioArchivo();
+    std::unique_ptr<IMedicoRepositorio> repo = std::make_unique<MedicoRepositorioArchivo>();
 
     Medico nuevoMedico(3, "Dr. Onnis", "Neurologia");
     repo->guardar(nuevoMedico);
@@ -340,8 +340,6 @@ int main() {
             cout << "Opción no válida. Intente nuevamente." << endl;
         }
     } while (opcion != 6);
-
-    delete repo;
 
     return 0;
 }

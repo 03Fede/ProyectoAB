@@ -1,4 +1,5 @@
 #include "GestorArchivo.h"
+#include "GestorDatos.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -19,11 +20,8 @@ void GestorArchivo::cargarPacientes(vector<Paciente>& pacientes) {
 
     string linea;
     while (getline(archivo, linea)) {
-        stringstream ss(linea);
-        int id, edad;
-        string nombre, historial;
-        ss >> id >> nombre >> edad >> historial;
-        pacientes.push_back(Paciente(id, nombre, edad, historial));
+        Paciente p = GestorDatos::convertirPaciente(linea);
+        pacientes.push_back(p);
     }
 }
 
@@ -41,11 +39,8 @@ void GestorArchivo::cargarMedicos(vector<Medico>& medicos) {
 
     string linea;
     while (getline(archivo, linea)) {
-        stringstream ss(linea);
-        int id;
-        string nombre, especialidad;
-        ss >> id >> nombre >> especialidad;
-        medicos.push_back(Medico(id, nombre, especialidad));
+        Medico m = GestorDatos::convertirMedico(linea);
+        medicos.push_back(m);
     }
 }
 
@@ -63,10 +58,7 @@ void GestorArchivo::cargarCitas(vector<CitaMedica>& citas) {
 
     string linea;
     while (getline(archivo, linea)) {
-        stringstream ss(linea);
-        int id, idPaciente, idMedico;
-        string fecha;
-        ss >> id >> idPaciente >> idMedico >> fecha;
-        citas.push_back(CitaMedica(id, idPaciente, idMedico, fecha));
+        CitaMedica c = GestorDatos::convertirCita(linea);
+        citas.push_back(c);
     }
 }
